@@ -1,0 +1,7 @@
+requests
+pillow
+numpy
+captcha
+tensorflow
+tflite
+opencv-python

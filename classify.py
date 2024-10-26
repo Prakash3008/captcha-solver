@@ -7,12 +7,9 @@ warnings.filterwarnings("ignore", category=DeprecationWarning)
 import os
 import cv2
 import numpy
-import string
-import random
 import argparse
 import tensorflow as tf
 import tensorflow.keras as keras
-from matplotlib import pyplot as plt
 import time
 
 def decode(predicted, symbols):
@@ -36,7 +33,6 @@ def main():
     parser.add_argument('--captcha-dir', help='Where to read the captchas to break', type=str)
     parser.add_argument('--output', help='File where the classifications should be saved', type=str)
     parser.add_argument('--symbols', help='File with the symbols to use in captchas', type=str)
-    parser.add_argument('--model-type', help='Specify whether the model is of type keras or tflite', type=str)
     args = parser.parse_args()
 
     if args.model_name is None:
@@ -55,10 +51,6 @@ def main():
         print("Please specify the captcha symbols file")
         exit(1)
 
-    if args.model_type is None:
-        print("Please specify the model type")
-        exit(1)
-
     symbols_file = open(args.symbols, 'r')
     captcha_symbols = symbols_file.readline().strip()
     symbols_file.close()
@@ -74,11 +66,7 @@ def main():
             loaded_model_json = json_file.read()
             json_file.close()
             model = keras.models.model_from_json(loaded_model_json)
-            if args.model_type == 'keras':
-                args.model_name = args.model_name + '.keras'
-            else:
-                args.model_name = args.model_name + '.tflite'
-            model.load_weights(args.model_name)
+            model.load_weights(args.model_name + '.keras')
             model.compile(loss='categorical_crossentropy',
                           optimizer=keras.optimizers.Adam(1e-3, amsgrad=True),
                           metrics=['accuracy'])

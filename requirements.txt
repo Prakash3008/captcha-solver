@@ -5,3 +5,4 @@ captcha
 tensorflow
 tflite
 opencv-python
+tflite-runtime

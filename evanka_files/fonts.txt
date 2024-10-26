@@ -1,2 +1,2 @@
-fonts/cRAZY_sTYLE.ttf
-fonts/WildCrazy.ttf
+evanka_files/fonts/cRAZY_sTYLE.ttf
+evanka_files/fonts/WildCrazy.ttf

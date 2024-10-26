@@ -1,2 +1,2 @@
-fonts/EamonU.ttf
-fonts/Jjester.otf
+prakash_files/fonts/EamonU.ttf
+prakash_files/fonts/Jjester.otf

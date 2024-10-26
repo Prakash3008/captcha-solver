@@ -29,7 +29,7 @@ pip3 install -r requirements.txt
 
 ```python
 
-python3 get_captchas.py --short-username pnarasim --output-folder-name prakash_files --file-list-name prakash_files/filelist.txt
+python3 get_captchas.py --short-username shortname --output-folder-name user/downloaded_captchas --file-list-name user/filelist.txt
 
 ```
 
@@ -40,7 +40,7 @@ python3 get_captchas.py --short-username pnarasim --output-folder-name prakash_f
 
 ```python
 
-python3 generate.py --width 192 --height 96 --count 220000 --output-dir prakash_files/training --symbols symbols.txt --fonts prakash_files/fonts.txt
+python3 generate.py --width 192 --height 96 --count 220000 --output-dir user/training --symbols symbols.txt --fonts user/fonts.txt
 
 ```
 
@@ -52,7 +52,7 @@ python3 generate.py --width 192 --height 96 --count 220000 --output-dir prakash_
 
 ```python
 
-python3 train.py --width 192 --height 96 --length 7 --batch-size 64 --train-dataset prakash_files/training/train --validate-dataset prakash_files/training/validate --output-model-name prakash_files/captcha_model --epochs 12 --symbols symbols.txt
+python3 train.py --width 192 --height 96 --length 7 --batch-size 64 --train-dataset user/training/train --validate-dataset user/training/validate --output-model-name user/captcha_model --epochs 12 --symbols symbols.txt
 
 ```
 
@@ -62,7 +62,7 @@ python3 train.py --width 192 --height 96 --length 7 --batch-size 64 --train-data
 
 ```python
 
-python3 convert.py --input-model prakash_files/captcha_model --output-model prakash_files/captcha_model 
+python3 convert.py --input-model user/captcha_model --output-model user/captcha_model 
 
 ```
 
@@ -74,7 +74,7 @@ python3 convert.py --input-model prakash_files/captcha_model --output-model prak
 
 ```python
 
-python3 classify.py --model-name prakash_files/captcha_model --captcha-dir prakash_files/captchas --output prakash_files/classify_output.csv --symbols symbols.txt --model-type tflite
+python3 classify.py --model-name user/captcha_model --captcha-dir user/captchas --output user/classify_output.csv --symbols symbols.txt --model-type tflite
 
 ```
 
@@ -84,9 +84,10 @@ python3 classify.py --model-name prakash_files/captcha_model --captcha-dir praka
 
 > Use the following command with the required arguments for sorting the csv file alphabetically
 
+
 ```python
 
-python3 sort.py --input-file prakash_files/classify_output.csv --output-file sorted_classify_output.csv
+python3 sort.py --input-file user/classify_output.csv --output-file user/sorted_classify_output.csv
 
 ```
 

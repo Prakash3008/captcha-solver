@@ -3,8 +3,9 @@
 The repository contains code to solve captchas with different lengths, fonts and great amount of noise in them.
 This project is done for the course module Scalable Computing - CS7NS1.
 
-Team Number : 30
-Members:
+### Team Number: 30
+
+### Members:
 1. Prakash Narasimhan
 2. Evanka Dsouza
 

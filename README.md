@@ -81,7 +81,7 @@ python3 convert.py --input-model user/captcha_model --output-model user/captcha_
 
 ```python
 
-python3 classify.py --model-name user/captcha_model --captcha-dir user/captchas --output user/classify_output.csv --symbols symbols.txt --model-type tflite
+python3 classify.py --model-name user/captcha_model --captcha-dir user/captchas --output user/classify_output.csv --symbols symbols.txt
 
 ```
 

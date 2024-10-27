@@ -17,8 +17,9 @@ This project is done for the course module Scalable Computing - CS7NS1.
 4. Generate training captchas
 5. Train the CNN captcha model with the generated training data
 6. Convert the .keras model to .tflite model to classify it on the 32-bit Raspberry PI
-7. Classify the downloaded captchas using the trained model
+7. Classify the downloaded captchas using the trained model on 64-bit devices
 8. Sort the output csv
+9. Classify the downloaded captchas using the trained model on 32-bit devices
 
 ## Step 1 & 2: Installing the required packages
 

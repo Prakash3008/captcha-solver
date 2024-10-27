@@ -74,9 +74,9 @@ python3 convert.py --input-model user/captcha_model --output-model user/captcha_
 
 > To use the model on the Raspberry PI to classify the captchas
 
-## Step 7: Classification of the captchas
+## Step 7: Classification of the captchas 64-bit devices
 
-> Use the following command with the required arguments for classification
+> Use the following command with the required arguments for classification on 64-bit devices
 
 ```python
 
@@ -98,3 +98,15 @@ python3 sort.py --input-file user/classify_output.csv --output-file user/sorted_
 ```
 
 > After sorting the csv file, add the short username in the first line of the csv file and then save it
+
+
+## Step 9: Running Classification of captchas on 32-bit devices
+
+> Use the following command with the required arguments for classification on 32-bit devices
+
+
+```python
+
+python3 classify_tflite.py --model-name user/captcha_model --captcha-dir user/captchas --output user/tflite_classify_output.csv --symbols symbols.txt 
+
+```

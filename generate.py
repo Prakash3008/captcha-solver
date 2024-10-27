@@ -62,7 +62,10 @@ def main():
             image_path = os.path.join(train_dir if i < int(captchas_to_generate * 0.9) else test_dir, random_str + '.png')
 
             if os.path.exists(image_path):
-                continue
+                version = 1
+                while os.path.exists(os.path.join(train_dir if i < int(captchas_to_generate * 0.9) else test_dir, random_str + '_' + str(version) + '.png')):
+                    version += 1
+                image_path = os.path.join(train_dir if i < int(captchas_to_generate * 0.9) else test_dir, random_str + '_' + str(version) + '.png')
 
             image = numpy.array(captcha_generator.generate_image(random_str))
             cv2.imwrite(image_path, image)

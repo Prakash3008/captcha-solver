@@ -2,7 +2,7 @@ requests
 pillow
 numpy
 captcha
-tensorflow
+tensorflow #ignore if running on 32-bit systems
 tflite
 opencv-python
 tflite-runtime

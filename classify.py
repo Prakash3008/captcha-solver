@@ -12,19 +12,10 @@ import tensorflow as tf
 import tensorflow.keras as keras
 import time
 
-def decode(predicted, symbols):
-    predicted = numpy.stack(predicted, axis=1)
-    
-    input_len = numpy.ones(predicted.shape[0]) * predicted.shape[1]
-    results = tf.keras.backend.ctc_decode(predicted, input_length=input_len, greedy=True)[0][0]
-    decoded = tf.keras.backend.get_value(results)
-
-    predictions = []
-    for seq in decoded:
-        label = ''.join([symbols[int(i)] for i in seq if i != -1])
-        predictions.append(label)
-    
-    return predictions
+def decode(characters, y):
+    y = numpy.argmax(numpy.array(y), axis=2)[:,0]
+    decoded_string = ''.join([characters[x] for x in y])
+    return decoded_string.rstrip('-')
 
 def main():
     start_time = time.time()
@@ -72,33 +63,24 @@ def main():
                           metrics=['accuracy'])
 
             for x in os.listdir(args.captcha_dir):
-                # Load image using OpenCV
                 raw_data = cv2.imread(os.path.join(args.captcha_dir, x))
                 
-                # Convert the image to grayscale for noise removal
                 gray_data = cv2.cvtColor(raw_data, cv2.COLOR_BGR2GRAY)
                 
-                # Apply Gaussian blur to reduce noise (e.g., small dots)
                 blurred_data = cv2.GaussianBlur(gray_data, (5, 5), 0)
                 
-                # Apply adaptive thresholding to convert the image to a binary (black & white) image
                 binary_data = cv2.adaptiveThreshold(blurred_data, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
                                                     cv2.THRESH_BINARY_INV, 11, 2)
                 
-                # Apply morphological operations to remove small dots and thin lines (noise)
                 kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (2, 2))
                 morphed_data = cv2.morphologyEx(binary_data, cv2.MORPH_OPEN, kernel)
                 
-                # Optionally, use dilation to strengthen the main text
                 morphed_data = cv2.dilate(morphed_data, kernel, iterations=1)
                 
-                # Convert the processed binary image back to RGB format for model input
                 rgb_data = cv2.cvtColor(morphed_data, cv2.COLOR_GRAY2RGB)
 
-                # Normalize pixel values to range [0, 1] for the model
                 image = numpy.array(rgb_data) / 255.0
 
-                # Reshape the image to match the input shape of the model (assuming channels first: [batch, channels, height, width])
                 (c, h, w) = image.shape
                 image = image.reshape([-1, c, h, w])
 

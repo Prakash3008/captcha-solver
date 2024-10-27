@@ -7,7 +7,6 @@ warnings.filterwarnings("ignore", category=DeprecationWarning)
 import os
 import cv2
 import numpy
-import string
 import random
 import argparse
 import tensorflow as tf
@@ -61,43 +60,33 @@ class ImageSequence(keras.utils.Sequence):
             filex = os.listdir(self.directory_name)
             random.shuffle(filex)
             self.files = dict(zip(map(lambda x: x.split('.')[0], filex), filex))
-            # Shuffle the files to avoid repetition in the same order
+
         actual_batch_size = min(self.batch_size, len(self.files))
         X = numpy.zeros((actual_batch_size, self.captcha_height, self.captcha_width, 3), dtype=numpy.float32)
         y = [numpy.zeros((actual_batch_size, len(self.captcha_symbols)), dtype=numpy.uint8) for i in range(self.captcha_length)]
 
-        # Inside your loop, after reading the image:
         for i in range(actual_batch_size):
 
             random_image_label = random.choice(list(self.files.keys()))
             random_image_file = self.files[random_image_label]
 
-            # We've used this image now, so we can't repeat it in this iteration
             self.used_files.append(self.files.pop(random_image_label))
 
-            # # Read the image using OpenCV
             raw_data = cv2.imread(os.path.join(self.directory_name, random_image_file))
 
-            # # Convert the image to grayscale to simplify noise removal
-            # gray_data = cv2.cvtColor(raw_data, cv2.COLOR_BGR2GRAY)
+            gray_data = cv2.cvtColor(raw_data, cv2.COLOR_BGR2GRAY)
 
-            # # Apply Gaussian blur to reduce noise like small dots
-            # blurred_data = cv2.GaussianBlur(gray_data, (5, 5), 0)
+            blurred_data = cv2.GaussianBlur(gray_data, (5, 5), 0)
 
-            # # Apply adaptive thresholding to create a binary image
-            # binary_data = cv2.adaptiveThreshold(blurred_data, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
-            #                                     cv2.THRESH_BINARY_INV, 11, 2)
+            binary_data = cv2.adaptiveThreshold(blurred_data, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
+                                                cv2.THRESH_BINARY_INV, 11, 2)
 
-            # # Apply morphological operations to remove small dots and lines
-            # # Erosion removes white noise, dilation restores the main text areas
-            # kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (2, 2))
-            # morphed_data = cv2.morphologyEx(binary_data, cv2.MORPH_OPEN, kernel)
+            kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (2, 2))
+            morphed_data = cv2.morphologyEx(binary_data, cv2.MORPH_OPEN, kernel)
 
-            # # Optionally, use dilation to strengthen the main characters if needed
-            # morphed_data = cv2.dilate(morphed_data, kernel, iterations=1)
+            morphed_data = cv2.dilate(morphed_data, kernel, iterations=1)
 
-            # # Convert the processed binary data back to RGB format
-            rgb_data = cv2.cvtColor(raw_data, cv2.COLOR_BGR2RGB)
+            rgb_data = cv2.cvtColor(morphed_data, cv2.COLOR_BGR2RGB)
 
             # We have to scale the input pixel values to the range [0, 1] for Keras
             # Divide by 255 to normalize
@@ -105,8 +94,7 @@ class ImageSequence(keras.utils.Sequence):
             X[i] = processed_data
 
             # Process the label
-            random_image_label = '{:$<7}'.format(random_image_label.split('_')[0])
-            # padded_label = random_image_label.ljust(self.captcha_length, ' ')  # Pad with spaces
+            random_image_label = '{:?<7}'.format(random_image_label.split('_')[0])
             for j, ch in enumerate(random_image_label):
                 if j < self.captcha_length:
                     y[j][i, self.captcha_symbols.find(ch)] = 1

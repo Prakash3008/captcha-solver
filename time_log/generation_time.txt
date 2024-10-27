@@ -1,0 +1,1 @@
+Generation of 220000 Captchas: 505.84 seconds
